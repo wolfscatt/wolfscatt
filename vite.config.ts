@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/", // 👈 ÖNEMLİ: root domain (wolfscatt.com) için ekledik
+  base: "./", // 👈 ÖNEMLİ: root domain (wolfscatt.com) için ekledik
 
   server: {
     host: "::",
