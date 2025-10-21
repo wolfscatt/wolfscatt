@@ -1,0 +1,10 @@
+project_id = "zepikmdefhxvuowdxizk"
+
+[functions.hello-world]
+verify_jwt = false
+
+[functions.sync-github-projects]
+verify_jwt = true
+
+[functions.submit-contact]
+verify_jwt = false
