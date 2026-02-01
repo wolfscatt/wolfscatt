@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import wolfLogo from '@/assets/wolf-logo.png';
@@ -6,6 +7,9 @@ import wolfLogo from '@/assets/wolf-logo.png';
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,8 +27,26 @@ const Navbar = () => {
     }
   };
 
+  const handleNavClick = (id: string) => {
+    setIsMobileMenuOpen(false);
+    if (isHomePage) {
+      scrollToSection(id);
+    } else {
+      navigate(`/#${id}`);
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (isHomePage) {
+      scrollToSection('home');
+    } else {
+      navigate('/');
+    }
+  };
+
   const navItems = [
     { label: 'Home', id: 'home' },
+    { label: 'Products', id: 'products' },
     { label: 'Projects', id: 'projects' },
     { label: 'About', id: 'about' },
     { label: 'Contact', id: 'contact' },
@@ -39,7 +61,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('home')}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={handleLogoClick}>
             <img src={wolfLogo} alt="Wolf Logo" className="w-10 h-10" />
             <span className="font-display text-xl text-primary">wolfscatt</span>
           </div>
@@ -49,7 +71,7 @@ const Navbar = () => {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => handleNavClick(item.id)}
                 className="text-foreground/80 hover:text-primary transition-colors duration-300 font-medium"
               >
                 {item.label}
@@ -81,7 +103,7 @@ const Navbar = () => {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => handleNavClick(item.id)}
                 className="block w-full text-left text-foreground/80 hover:text-primary transition-colors py-2"
               >
                 {item.label}

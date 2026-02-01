@@ -98,6 +98,45 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          id: string
+          slug: string
+          name: string
+          description: string | null
+          apk_url: string | null
+          pdf_url: string | null
+          whatsapp_phone: string | null
+          screenshot_urls: string[]
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          slug: string
+          name: string
+          description?: string | null
+          apk_url?: string | null
+          pdf_url?: string | null
+          whatsapp_phone?: string | null
+          screenshot_urls?: string[]
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          slug?: string
+          name?: string
+          description?: string | null
+          apk_url?: string | null
+          pdf_url?: string | null
+          whatsapp_phone?: string | null
+          screenshot_urls?: string[]
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
