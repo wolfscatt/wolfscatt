@@ -63,7 +63,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={handleLogoClick}>
             <img src={wolfLogo} alt="Wolf Logo" className="w-10 h-10" />
-            <span className="font-display text-xl text-primary">wolfscatt</span>
+            <span className="font-display text-xl text-primary">Velmora</span>
           </div>
 
           {/* Desktop Navigation */}
