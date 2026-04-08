@@ -156,7 +156,7 @@ export default function FaultCode() {
             </CardHeader>
             <CardContent className="space-y-2 text-muted-foreground text-sm">
               <p>• MVP sürüm, Play Store'da değildir.</p>
-              <p>• Kişisel veri toplamaz, reklam içermez.</p>
+              <p>• Kişisel veriler şifrelenerek saklanır, reklam içermez.</p>
               <p>• APK yalnızca resmi siteden dağıtılır.</p>
             </CardContent>
           </Card>
@@ -205,7 +205,7 @@ export default function FaultCode() {
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/90">
               <p><strong>1 Hafta Ücretsiz Deneme</strong> — Uygulamayı deneyin.</p>
-              <p><strong>İlk 50 kullanıcı:</strong> Süresiz lisans 2000 TL + KDV</p>
+              <p><strong>İlk 15 kullanıcı:</strong> Süresiz lisans 1500 TL + KDV</p>
               <p>Ödeme sonrası lisans kodu ile aktivasyon yapılır.</p>
               <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-2">
                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
