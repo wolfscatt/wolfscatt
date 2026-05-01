@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Github, Loader2, ExternalLink, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -50,11 +51,43 @@ const ProjectDetail = () => {
   }
 
   const hasReadme = Boolean(project.readme_content && project.readme_content.trim().length > 0);
+  const resolveReadmeAssetUrl = (src?: string): string => {
+    if (!src) return '';
+
+    // GitHub blob URL ise raw URL'ye çevir
+    const githubBlobMatch = src.match(
+      /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/
+    );
+
+    if (githubBlobMatch) {
+      const [, owner, repo, branch, path] = githubBlobMatch;
+      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    }
+
+    // Zaten tam URL ise direkt kullan
+    if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:')) {
+      return src;
+    }
+
+    // README URL'den owner, repo ve branch bilgisini çıkar
+    const readmeUrlMatch = project.readme_url?.match(
+      /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\//
+    );
+
+    if (!readmeUrlMatch) {
+      return src;
+    }
+
+    const [, owner, repo, branch] = readmeUrlMatch;
+    const cleanPath = src.replace(/^\.?\//, '');
+
+    return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${cleanPath}`;
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 py-32">
         <Button
           variant="ghost"
@@ -156,6 +189,7 @@ const ProjectDetail = () => {
               <div className="max-w-none text-foreground/80">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
                   components={{
                     h1: ({ children }) => (
                       <h1 className="font-display text-3xl font-bold text-foreground mt-8 mb-4 first:mt-0">
@@ -248,10 +282,16 @@ const ProjectDetail = () => {
                     ),
                     img: ({ src, alt }) => (
                       <img
-                        src={src}
+                        src={resolveReadmeAssetUrl(src)}
                         alt={alt || 'README image'}
-                        className="rounded-lg border border-primary/20 my-6 max-w-full"
+                        loading="lazy"
+                        className="inline-block rounded-xl border border-primary/20 shadow-lg my-4 mx-2 max-w-full h-auto"
                       />
+                    ),
+                    div: ({ children }) => (
+                      <div className="flex flex-wrap justify-center gap-4 my-6">
+                        {children}
+                      </div>
                     ),
                   }}
                 >
