@@ -4,14 +4,17 @@ import { supabase } from '@/integrations/supabase/client';
 export interface Project {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
   category: 'mobile' | 'games' | 'desktop' | 'web' | 'ai';
   github_url: string;
   download_link: string | null;
-  repo_topics: string[];
-  stars: number;
-  created_at: string;
-  updated_at: string;
+  repo_topics: string[] | null;
+  stars: number | null; 
+  created_at: string | null;
+  updated_at: string | null;
+  readme_content: string | null;
+  readme_url: string | null;
+  readme_fetched_at: string | null;
 }
 
 export function useProjects() {

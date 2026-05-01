@@ -1,5 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Github, Loader2 } from 'lucide-react';
+import { ArrowLeft, Download, Github, Loader2, ExternalLink, FileText } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Navbar from '@/components/Navbar';
@@ -46,6 +49,8 @@ const ProjectDetail = () => {
     );
   }
 
+  const hasReadme = Boolean(project.readme_content && project.readme_content.trim().length > 0);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -80,19 +85,33 @@ const ProjectDetail = () => {
                 </Button>
               </a>
             )}
+
             <a href={project.github_url} target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="border-primary/30 text-primary hover-glow">
                 <Github className="mr-2" size={20} />
                 View on GitHub
               </Button>
             </a>
+
+            {project.readme_url && (
+              <a href={project.readme_url} target="_blank" rel="noopener noreferrer">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary/30 text-primary hover-glow"
+                >
+                  <FileText className="mr-2" size={20} />
+                  View README
+                </Button>
+              </a>
+            )}
           </div>
 
           {/* Description */}
           <div className="glass-morphism rounded-xl p-8 mb-12 animate-fade-in-up">
             <h2 className="font-display text-2xl font-bold mb-4 text-primary">About This Project</h2>
             <p className="text-foreground/80 leading-relaxed text-lg">
-              {project.description}
+              {project.description || 'No description provided.'}
             </p>
           </div>
 
@@ -113,9 +132,154 @@ const ProjectDetail = () => {
             </div>
           )}
 
+          {/* README */}
+          <div className="glass-morphism rounded-xl p-8 mb-12 animate-fade-in-up">
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <h2 className="font-display text-2xl font-bold text-primary">
+                README Documentation
+              </h2>
+
+              {project.readme_url && (
+                <a
+                  href={project.readme_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-sm text-primary hover:underline"
+                >
+                  Open on GitHub
+                  <ExternalLink className="ml-1" size={14} />
+                </a>
+              )}
+            </div>
+
+            {hasReadme ? (
+              <div className="max-w-none text-foreground/80">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ children }) => (
+                      <h1 className="font-display text-3xl font-bold text-foreground mt-8 mb-4 first:mt-0">
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 className="font-display text-2xl font-bold text-foreground mt-8 mb-4">
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="font-display text-xl font-semibold text-foreground mt-6 mb-3">
+                        {children}
+                      </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p className="leading-7 mb-4 text-foreground/80">
+                        {children}
+                      </p>
+                    ),
+                    a: ({ href, children }) => (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        {children}
+                      </a>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc pl-6 mb-4 space-y-2">
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="list-decimal pl-6 mb-4 space-y-2">
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="leading-7 text-foreground/80">
+                        {children}
+                      </li>
+                    ),
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-primary/50 pl-4 italic text-muted-foreground my-4">
+                        {children}
+                      </blockquote>
+                    ),
+                    code: ({ children, className }) => {
+                      const isBlock = className?.includes('language-');
+
+                      if (isBlock) {
+                        return (
+                          <code className="block bg-black/40 border border-primary/20 rounded-lg p-4 my-4 overflow-x-auto text-sm text-foreground">
+                            {children}
+                          </code>
+                        );
+                      }
+
+                      return (
+                        <code className="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-sm">
+                          {children}
+                        </code>
+                      );
+                    },
+                    pre: ({ children }) => (
+                      <pre className="bg-black/40 border border-primary/20 rounded-lg p-4 my-4 overflow-x-auto">
+                        {children}
+                      </pre>
+                    ),
+                    table: ({ children }) => (
+                      <div className="overflow-x-auto my-6">
+                        <table className="w-full border-collapse border border-primary/20 text-sm">
+                          {children}
+                        </table>
+                      </div>
+                    ),
+                    th: ({ children }) => (
+                      <th className="border border-primary/20 bg-primary/10 px-4 py-2 text-left text-foreground">
+                        {children}
+                      </th>
+                    ),
+                    td: ({ children }) => (
+                      <td className="border border-primary/20 px-4 py-2 text-foreground/80">
+                        {children}
+                      </td>
+                    ),
+                    img: ({ src, alt }) => (
+                      <img
+                        src={src}
+                        alt={alt || 'README image'}
+                        className="rounded-lg border border-primary/20 my-6 max-w-full"
+                      />
+                    ),
+                  }}
+                >
+                  {project.readme_content}
+                </ReactMarkdown>
+              </div>
+            ) : (
+              <div className="text-muted-foreground">
+                <p>This project does not have a README.md file yet.</p>
+              </div>
+            )}
+
+            {project.readme_fetched_at && (
+              <p className="text-xs text-muted-foreground mt-6">
+                README last synced:{' '}
+                {new Date(project.readme_fetched_at).toLocaleDateString()}
+              </p>
+            )}
+          </div>
+
           {/* Metadata */}
           <div className="text-center text-sm text-muted-foreground">
-            <p>Last updated: {new Date(project.updated_at).toLocaleDateString()}</p>
+            <p>
+              Last updated:{' '}
+              {project.updated_at
+                ? new Date(project.updated_at).toLocaleDateString()
+                : 'Unknown'}
+            </p>
           </div>
         </div>
       </div>
