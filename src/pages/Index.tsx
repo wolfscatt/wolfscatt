@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import ProductsSection from '@/components/ProductsSection';
+import DynamicProductsSection from '@/components/DynamicProductsSection';
 import Projects from '@/components/Projects';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
@@ -21,10 +21,10 @@ const Index = () => {
   }, [location.pathname, location.hash]);
 
   return (
-    <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
-      <ProductsSection />
+      <DynamicProductsSection />
       <Projects />
       <About />
       <Contact />

@@ -8,7 +8,8 @@ import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
-import FaultCode from "./pages/FaultCode";
+import FaultCodeRedirect from "./pages/FaultCodeRedirect";
+import ProductPage from "./pages/ProductPage";
 import { AuthProvider } from "./providers/AuthProvider";
 
 const queryClient = new QueryClient({
@@ -33,7 +34,8 @@ function App() {
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/faultcode" element={<FaultCode />} />
+              <Route path="/faultcode" element={<FaultCodeRedirect />} />
+              <Route path="/products/:slug" element={<ProductPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
